@@ -3,13 +3,22 @@ import { ModelViewerElement } from "@google/model-viewer";
 
 const vscode = acquireVsCodeApi();
 
-async function loadModelFromData(initialContent: Uint8Array): Promise<string> {
-    const blob = new Blob([initialContent]);
+async function loadModelFromData(initialContent: Uint8Array, mimeType: string): Promise<string> {
+    const blob = new Blob([initialContent], { type: mimeType });
     return URL.createObjectURL(blob);
 }
 
-function isUsdzFile(fileExtension: string): boolean {
-    return fileExtension === '.usdz';
+function getMimeType(fileExtension: string): string {
+    switch (fileExtension) {
+        case '.usdz':
+            return 'model/vnd.usdz+zip';
+        case '.glb':
+            return 'model/gltf-binary';
+        case '.gltf':
+            return 'model/gltf+json';
+        default:
+            return 'application/octet-stream';
+    }
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -18,21 +27,23 @@ document.addEventListener("DOMContentLoaded", function () {
         switch (type) {
             case 'update':
                 {
-                    loadModelFromData(body).then(modelpath => {
-                        const modelViewer: ModelViewerElement = document.querySelector('#model-3d')!;
+                    const mimeType = getMimeType(fileExtension);
+                    loadModelFromData(body, mimeType).then(modelpath => {
                         const nativeModel: HTMLElement = document.querySelector('#model-native')!;
+                        const modelViewer: ModelViewerElement = document.querySelector('#model-3d')!;
                         
-                        if (isUsdzFile(fileExtension)) {
-                            // Use native <model> element for USDZ files
-                            modelViewer.style.display = 'none';
-                            nativeModel.style.display = 'block';
-                            nativeModel.setAttribute('src', modelpath);
-                        } else {
-                            // Use model-viewer for glTF/glb files
-                            nativeModel.style.display = 'none';
-                            modelViewer.style.display = 'grid';
-                            modelViewer.src = modelpath;
-                        }
+                        // Clear existing sources
+                        const existingSources = nativeModel.querySelectorAll('source');
+                        existingSources.forEach(source => source.remove());
+                        
+                        // Create and add source element for native <model>
+                        const source = document.createElement('source');
+                        source.src = modelpath;
+                        source.type = mimeType;
+                        nativeModel.insertBefore(source, modelViewer);
+                        
+                        // Also set model-viewer src as fallback
+                        modelViewer.src = modelpath;
                     });
 
                     return;

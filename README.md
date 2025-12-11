@@ -1,8 +1,8 @@
 # vscode-model-viewer README
 
 This is the vscode extention for viewing 3D models including glTF(glb) and USDZ formats.
-- glTF/glb files are rendered using Google's model-viewer (https://github.com/google/model-viewer)
-- USDZ files are rendered using the native HTML `<model>` element (https://webkit.org/blog/17118/a-step-into-the-spatial-web-the-html-model-element-in-apple-vision-pro/)
+- Uses the native HTML `<model>` element (https://webkit.org/blog/17118/a-step-into-the-spatial-web-the-html-model-element-in-apple-vision-pro/) with Google's model-viewer (https://github.com/google/model-viewer) as a fallback for broader browser support
+- Supports USDZ, glTF, and glb file formats
 
 ## How to view 3D models (glb/gltf/usdz)
 
