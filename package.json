@@ -1,7 +1,7 @@
 {
   "name": "vscode-model-viewer",
-  "displayName": "glTF Model Viewer",
-  "description": "Wrapper of google's model-viewer",
+  "displayName": "3D Model Viewer",
+  "description": "Viewer for glTF and USDZ 3D models",
   "publisher": "cloudedcat",
   "author": {
 		"name": "Maksim Fedorov",
@@ -25,17 +25,19 @@
   "activationEvents": [],
   "keywords": [
     "gltf",
-    "glb"
+    "glb",
+    "usdz",
+    "3d"
   ],
   "main": "./dist/extension.js",
   "contributes": {
     "customEditors": [
       {
         "viewType": "modelViewer.gltfPreview",
-        "displayName": "glTF",
+        "displayName": "3D Model",
         "selector": [
           {
-            "filenamePattern": "*.{glb,gltf}"
+            "filenamePattern": "*.{glb,gltf,usdz}"
           }
         ],
         "priority": "option"
