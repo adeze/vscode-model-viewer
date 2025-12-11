@@ -112,9 +112,11 @@ export class GLTFReadonlyProvider implements vscode.CustomReadonlyEditorProvider
 		};
 
 		const update = async () => {
+			const fileExtension = path.extname(document.uri.fsPath).toLowerCase();
 			webviewPanel.webview.postMessage({
 				type: "update",
 				body: document.documentData,
+				fileExtension: fileExtension,
 			});
 		}
 
@@ -166,12 +168,14 @@ export class GLTFReadonlyProvider implements vscode.CustomReadonlyEditorProvider
 
 				<script nonce="${nonce}" src="${scriptMain}"></script>
 
-				<title>GLtf viewer</title>
+				<title>3D Model Viewer</title>
 			</head>
 			<body>
-				<model-viewer
-				id="model-3d"
-				shadow-intensity="1" camera-controls touch-action="pan-y"></model-viewer>	
+				<model id="model-native" interactive>
+					<model-viewer
+					id="model-3d"
+					shadow-intensity="1" camera-controls touch-action="pan-y"></model-viewer>
+				</model>
 			</body>
 		</html>`;
 	}
