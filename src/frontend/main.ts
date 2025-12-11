@@ -8,6 +8,10 @@ async function loadModelFromData(initialContent: Uint8Array, mimeType: string): 
     return URL.createObjectURL(blob);
 }
 
+/**
+ * Returns the appropriate MIME type for 3D model file formats.
+ * Used to set correct content type for <source> elements in native <model> element.
+ */
 function getMimeType(fileExtension: string): string {
     switch (fileExtension) {
         case '.usdz':
